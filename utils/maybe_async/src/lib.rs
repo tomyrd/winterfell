@@ -142,9 +142,16 @@ pub fn maybe_async_trait(_attr: TokenStream, input: TokenStream) -> TokenStream 
                 }
             }
 
-            quote! {
-                #[async_trait::async_trait(?Send)]
-                #trait_item
+            if cfg!(feature = "async-send") {
+                quote! {
+                    #[async_trait::async_trait]
+                    #trait_item
+                }
+            } else {
+                quote! {
+                    #[async_trait::async_trait(?Send)]
+                    #trait_item
+                }
             }
         } else {
             quote! {
@@ -170,9 +177,17 @@ pub fn maybe_async_trait(_attr: TokenStream, input: TokenStream) -> TokenStream 
                     });
                 }
             }
-            quote! {
-                #[async_trait::async_trait(?Send)]
-                #impl_item
+
+            if cfg!(feature = "async-send") {
+                quote! {
+                    #[async_trait::async_trait]
+                    #impl_item
+                }
+            } else {
+                quote! {
+                    #[async_trait::async_trait(?Send)]
+                    #impl_item
+                }
             }
         } else {
             quote! {

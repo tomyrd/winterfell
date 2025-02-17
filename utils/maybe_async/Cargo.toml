@@ -16,6 +16,7 @@ proc-macro = true
 
 [features]
 async = []
+async-send = ["async"]
 
 [dependencies]
 quote = "1"
